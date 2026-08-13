@@ -1,7 +1,7 @@
 # 📄 PDF Q&A Chatbot
 
 Upload any PDF, ask questions about it in plain English, and get answers
-**grounded in the document** — with page-number citations so you can verify
+**grounded in the document** with page-number citations so you can verify
 every claim. Built as a learning project to understand Retrieval-Augmented
 Generation (RAG) end to end, from raw PDF bytes to a chat UI.
 
@@ -33,7 +33,7 @@ No OpenAI account needed. No paid embeddings. Just a free OpenRouter key.
 2. The app reads it, splits it into small overlapping chunks, and converts
    each chunk into a vector (a list of numbers that captures its meaning).
 3. When you ask a question, the app converts your question into a vector
-   too, and finds the chunks whose vectors are most similar — i.e. the
+   too, and finds the chunks whose vectors are most similar i.e. the
    parts of the PDF most relevant to what you asked.
 4. Those chunks (not the whole PDF) get handed to an LLM along with your
    question, with strict instructions: *answer only from this context, and
@@ -41,7 +41,7 @@ No OpenAI account needed. No paid embeddings. Just a free OpenRouter key.
 5. You get a streamed answer with citations, and can expand "Sources" to
    see the exact text it used.
 
-This is called **RAG (Retrieval-Augmented Generation)** — instead of
+This is called **RAG (Retrieval-Augmented Generation)** instead of
 relying on what the model memorized during training, you retrieve the
 relevant facts yourself and hand them to the model at question time. It's
 the standard pattern behind most "chat with your documents" products.
@@ -63,7 +63,7 @@ the standard pattern behind most "chat with your documents" products.
                      ▼
         ┌─────────────────────────┐
         │  2. EMBEDDING             │  sentence-transformers
-        │  src/embeddings.py        │  (all-MiniLM-L6-v2) — runs locally,
+        │  src/embeddings.py        │  (all-MiniLM-L6-v2) runs locally,
         │                          │  free, no API key
         │                          │  → vectors stored in ChromaDB
         └────────────┬─────────────┘
@@ -92,7 +92,7 @@ the standard pattern behind most "chat with your documents" products.
 
 **Why local embeddings + OpenRouter for chat, instead of one provider for
 everything?** OpenRouter gives access to a huge range of chat models
-through one API key and one bill, which is great for experimenting — but
+through one API key and one bill, which is great for experimenting but
 it doesn't offer an embeddings endpoint. Running embeddings locally via
 `sentence-transformers` means the "understand the document" step is
 completely free forever, no matter how many PDFs you index, and only the
@@ -117,7 +117,7 @@ completely free forever, no matter how many PDFs you index, and only the
 
 ```
 pdf-qa-chatbot/
-├── app.py                  # Streamlit entrypoint — upload, chat, citations
+├── app.py                  # Streamlit entrypoint upload, chat, citations
 ├── src/
 │   ├── config.py            # every env-driven setting, in one place
 │   ├── ingestion.py          # PDF → page-aware, token-sized chunks
@@ -136,8 +136,8 @@ pdf-qa-chatbot/
 
 **Why split it this way?** Each file does exactly one job in the pipeline
 above. If you want to swap the vector store, you touch `embeddings.py` and
-`retrieval.py` — nothing else changes. If you want to swap the LLM, you
-touch `llm_client.py` — the prompt, retrieval, and UI code never need to
+`retrieval.py` nothing else changes. If you want to swap the LLM, you
+touch `llm_client.py` the prompt, retrieval, and UI code never need to
 know or care which provider is behind it.
 
 ---
@@ -186,7 +186,7 @@ The app opens automatically at **http://localhost:8501**.
    ```
    OPENROUTER_API_KEY=sk-or-your-actual-key-here
    ```
-5. Add credit to your OpenRouter account under **Settings → Credits** — you
+5. Add credit to your OpenRouter account under **Settings → Credits** you
    don't need much. Chat models on OpenRouter are typically fractions of a
    cent per question; a couple of dollars covers a lot of testing.
 
@@ -202,7 +202,7 @@ The app opens automatically at **http://localhost:8501**.
 Once `streamlit run app.py` is running:
 
 1. Click **"Upload a PDF"** and choose any PDF file
-2. Wait for **"Indexed ... chunks — Ask away!"** — this is steps 1 and 2 of
+2. Wait for **"Indexed ... chunks — Ask away!"** this is steps 1 and 2 of
    the pipeline running (parsing + embedding). Takes a few seconds for a
    typical document.
 3. Type a question in the chat box at the bottom
@@ -219,23 +219,23 @@ are cached locally under `.chroma/`, keyed by a hash of the file content.
 If you're reading this to actually learn RAG (not just run the app), here's
 the order to read the code in:
 
-1. **`src/ingestion.py`** — the simplest file. Takes a PDF path, returns a
+1. **`src/ingestion.py`** the simplest file. Takes a PDF path, returns a
    list of `Chunk` objects. Read `chunk_pdf()` first.
-2. **`src/embeddings.py`** — `embed_texts()` turns a list of strings into a
+2. **`src/embeddings.py`** `embed_texts()` turns a list of strings into a
    list of vectors. `build_or_load_collection()` stores those vectors in
    Chroma alongside the original text and page number, so a search later
    can return "here's the matching text, and here's its page."
-3. **`src/retrieval.py`** — `retrieve()` embeds *the question* using the
+3. **`src/retrieval.py`** `retrieve()` embeds *the question* using the
    exact same model, then asks Chroma for the closest-matching stored
    vectors. This is the "search" half of RAG.
-4. **`src/prompts.py`** — `build_messages()` is where retrieved chunks
+4. **`src/prompts.py`** `build_messages()` is where retrieved chunks
    actually become a prompt. Look at `SYSTEM_PROMPT` — this is what stops
    the model from making things up: it's explicitly told to answer only
    from the given context and to admit when it doesn't know.
-5. **`src/generation.py`** — `answer_question()` is the one function that
+5. **`src/generation.py`** `answer_question()` is the one function that
    ties retrieval + prompting + the LLM call together. This is "the RAG
    pipeline" as a single call.
-6. **`app.py`** — everything above, wired into a UI. `st.session_state`
+6. **`app.py`** everything above, wired into a UI. `st.session_state`
    is Streamlit's way of remembering things (chat history, which PDF is
    loaded) between user interactions.
 
@@ -254,14 +254,14 @@ pytest
 ```
 
 `tests/test_prompts.py` checks the prompt-assembly logic without touching
-the network — no API key required, runs in under a second. Good file to
+the network no API key required, runs in under a second. Good file to
 copy the pattern from if you add more tests.
 
 ---
 
 ## Troubleshooting
 
-These are real errors this project hit during setup — leaving them here so
+These are real errors this project hit during setup leaving them here so
 you don't have to debug them from scratch.
 
 | Error | Cause | Fix |
@@ -285,7 +285,7 @@ Everything about "which model answers questions" lives in
 2. Point `get_llm_client()` at your new class.
 
 Nothing in `app.py`, `generation.py`, `prompts.py`, or `retrieval.py` needs
-to change — this is the whole point of keeping the LLM behind one thin
+to change this is the whole point of keeping the LLM behind one thin
 wrapper.
 
 ---
@@ -293,17 +293,17 @@ wrapper.
 ## Deploying it publicly (read this first)
 
 Hosting on **Streamlit Community Cloud** or **Hugging Face Spaces** is
-free. The thing that *isn't* free is API usage — and if you deploy with
+free. The thing that *isn't* free is API usage and if you deploy with
 your real API key baked in as a "secret," **anyone who finds the public
 link can ask it questions using your credit.**
 
 If you do deploy:
 
 1. Push this repo to GitHub (your `.env` is gitignored, so your key won't
-   go with it — good)
+   go with it good)
 2. Add `OPENROUTER_API_KEY` as a **secret** in your hosting platform's
    settings (not committed to the repo)
-3. **Set a hard spending limit on your OpenRouter key first** — under your
+3. **Set a hard spending limit on your OpenRouter key first** under your
    OpenRouter dashboard, you can cap a key at a fixed dollar amount, so
    even worst-case public traffic costs you a known, bounded amount
    instead of an open-ended risk
@@ -318,16 +318,16 @@ just as effective as a live public link, with zero ongoing cost risk.
 A few decisions worth explaining, since "why not X instead" is a fair
 question for anyone learning from this repo:
 
-- **ChromaDB over Pinecone/a hosted vector DB** — zero setup, persists to
+- **ChromaDB over Pinecone/a hosted vector DB** zero setup, persists to
   a local folder, nothing to sign up for. Swap it out once you actually
   need multi-machine access or scale past what a laptop can hold.
-- **Token-based chunking over character-based** — chunk sizes are set in
+- **Token-based chunking over character-based** chunk sizes are set in
   *tokens* (what the model actually counts against its context window),
   not characters, so a chunk of "800 tokens" is a meaningful, consistent
   unit regardless of how dense the text is.
-- **15% chunk overlap** — prevents a sentence that happens to straddle a
+- **15% chunk overlap** prevents a sentence that happens to straddle a
   chunk boundary from losing its meaning in both halves.
-- **Streamlit over a custom frontend** — this project is about the RAG
+- **Streamlit over a custom frontend** this project is about the RAG
   pipeline, not building a chat UI from scratch. `st.chat_message`,
   `st.chat_input`, and `st.write_stream` cover everything needed here in
   a few lines each.
