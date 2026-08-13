@@ -175,28 +175,6 @@ streamlit run app.py
 The app opens automatically at **http://localhost:8501**.
 
 ---
-
-## Getting an OpenRouter API key (free)
-
-1. Go to **https://openrouter.ai** and sign up (free, no credit card required
-   just to create an account)
-2. Go to **https://openrouter.ai/keys** and click **Create Key**
-3. Copy the key (starts with `sk-or-`)
-4. Paste it into your `.env` file:
-   ```
-   OPENROUTER_API_KEY=sk-or-your-actual-key-here
-   ```
-5. Add credit to your OpenRouter account under **Settings → Credits** you
-   don't need much. Chat models on OpenRouter are typically fractions of a
-   cent per question; a couple of dollars covers a lot of testing.
-
-> ⚠️ **Never commit your `.env` file or paste your real key into chat,
-> code comments, or a GitHub issue.** `.env` is already listed in
-> `.gitignore` so `git` won't track it — but always double-check with
-> `git status` before your first commit.
-
----
-
 ## Running the app
 
 Once `streamlit run app.py` is running:
