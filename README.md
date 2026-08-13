@@ -180,14 +180,14 @@ The app opens automatically at **http://localhost:8501**.
 Once `streamlit run app.py` is running:
 
 1. Click **"Upload a PDF"** and choose any PDF file
-2. Wait for **"Indexed ... chunks — Ask away!"** this is steps 1 and 2 of
+2. Wait for **"Indexed ... chunks Ask away!"** this is steps 1 and 2 of
    the pipeline running (parsing + embedding). Takes a few seconds for a
    typical document.
 3. Type a question in the chat box at the bottom
 4. Watch the answer stream in, then click **"Sources: pages ..."** to see
    exactly which parts of the PDF it used
 
-Re-uploading the *same* PDF later skips re-embedding — each PDF's vectors
+Re-uploading the *same* PDF later skips re-embedding each PDF's vectors
 are cached locally under `.chroma/`, keyed by a hash of the file content.
 
 ---
