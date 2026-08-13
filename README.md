@@ -1,4 +1,4 @@
-# 📄 PDF Q&A Chatbot
+# 📄 Docu Talk
 
 Upload any PDF, ask questions about it in plain English, and get answers
 **grounded in the document** with page-number citations so you can verify
